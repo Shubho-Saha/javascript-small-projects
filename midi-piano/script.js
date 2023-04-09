@@ -53,17 +53,20 @@ function playNotes() {
   });
 
   const activeNotes = NOTE_DETAILS.filter(n=> n.active);
+  const gain = 1 / activeNotes.length;
   activeNotes.forEach(n=> {
-    startNote(n);
+    startNote(n, gain);
   });
 }
 
 
-function startNote(noteDetail) {
+function startNote(noteDetail, gain) {
+  const gainNode = audioContext.createGain();
+  gainNode.gain.value = gain;
   const oscillator = audioContext.createOscillator();
-  oscillator.frequency = noteDetail.frequency;
+  oscillator.frequency.value = noteDetail.frequency;
   oscillator.type = 'sine';
-  oscillator.connect(audioContext.destination);
+  oscillator.connect(gainNode).connect(audioContext.destination);
   oscillator.start();
   noteDetail.oscillator = oscillator;
 }
