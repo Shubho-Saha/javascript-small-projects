@@ -1,3 +1,5 @@
+const audioContext = new AudioContext();
+
 const NOTE_DETAILS = [
   { note: "C", key: "Z", frequency: 261.626, active:false},
   { note: "Db", key: "S", frequency: 277.183, active:false },
@@ -43,7 +45,11 @@ function getNoteDetail(keyboardKey) {
 function playNotes() {
   NOTE_DETAILS.forEach(n=> {
     const keyElement = document.querySelector(`[data-note="${n.note}"]`);
-    keyElement.classList.toggle("active", n.active)
+    keyElement.classList.toggle("active", n.active);
+    if (n.oscillator != null) {
+      n.oscillator.stop();
+      n.oscillator.disconnect();
+    }
   });
 
   const activeNotes = NOTE_DETAILS.filter(n=> n.active);
@@ -54,5 +60,10 @@ function playNotes() {
 
 
 function startNote(noteDetail) {
-  
+  const oscillator = audioContext.createOscillator();
+  oscillator.frequency = noteDetail.frequency;
+  oscillator.type = 'sine';
+  oscillator.connect(audioContext.destination);
+  oscillator.start();
+  noteDetail.oscillator = oscillator;
 }
