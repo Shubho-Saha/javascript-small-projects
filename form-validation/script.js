@@ -1,27 +1,56 @@
-// TODO: Select all elements needed
-//    Use the HTML to figure out what classes/ids will work best for selecting each element
 
-// TODO: Create an event listener for when the form is submitted and do the following inside of it.
-//    TODO: Create an array to store all error messages and clear any old error messages
-//    TODO: Define the following validation checks with appropriate error messages
-//      1. Ensure the username is at least 6 characters long
-//      2. Ensure the password is at least 10 characters long
-//      3. Ensure the password and confirmation password match
-//      4. Ensure the terms checkbox is checked
-//    TODO: If there are any errors then prevent the form from submitting and show the error messages
+const form = document.getElementById('form');
+const userName = document.getElementById('username');
+const password = document.getElementById('password');
+const passConfirm = document.getElementById('password-confirmation');
+const terms = document.getElementById('terms');
+const errors = document.querySelector('.errors')
+const errorList = document.querySelector('.errors-list')
 
-// TODO: Define this function
+
+form.addEventListener('submit', e => {
+  
+  clearErrors();
+
+  const errorMsg = []
+
+  if (userName.value.length < 6) {
+    errorMsg.push('username must be at least 6 characters long')
+  }
+  if (password.value.length < 10) {
+    errorMsg.push('Password must be 10 characters long')
+  }
+  if (password.value !== passConfirm.value) {
+    errorMsg.push('Password must match')
+  }
+  if (!terms.checked) {
+    errorMsg.push('You must accept the terms')
+  }
+
+  if (errorMsg.length > 0) {
+    e.preventDefault();
+    showErrors(errorMsg)
+  }
+
+})
+
+
+
 function clearErrors() {
-  // Loop through all the children of the error-list element and remove them
-  // IMPORTANT: This cannot be done with a forEach loop or a normal for loop since as you remove children it will modify the list you are looping over which will not work
-  // I recommend using a while loop to accomplish this task
-  // This is the trickiest part of this exercise so if you get stuck and are unable to progress you can also set the innerHTML property of the error-list to an empty string and that will also clear the children. I recommend trying to accomplish this with a while loop, though, for practice.
-  // Also, make sure you remove the show class to the errors container
+  while (errorList.children[0] != null) {
+    errorList.removeChild(errorList.children[0])
+  }
+
+  errors.classList.remove('show');
 }
 
-// TODO: Define this function
+
 function showErrors(errorMessages) {
-  // Add each error to the error-list element
-  // Make sure to use an li as the element for each error
-  // Also, make sure you add the show class to the errors container
+  errorMessages.forEach(msg => {
+    let errElement = document.createElement('li');
+    errElement.innerText = `${msg}`
+    errorList.appendChild(errElement);
+  })
+  errors.classList.add('show')
+
 }
