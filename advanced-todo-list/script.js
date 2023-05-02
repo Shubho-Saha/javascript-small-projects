@@ -9,6 +9,7 @@ const TODOS_STORAGE_KEY = `${LOCAL_STORAGE_PREFIX}-todos`;
 let todos = loadTodos();
 todos.forEach(renderTodo);
 
+// Complete todo - Using checkbox
 list.addEventListener('change', e=> {
     if (!e.target.matches('[data-list-item-checkbox]')) return
 
@@ -19,6 +20,8 @@ list.addEventListener('change', e=> {
     saveTodos()
 })
 
+
+// Deleting Todo
 list.addEventListener('click', e=> {
     if (!e.target.matches('[data-button-delete]')) return
 
@@ -29,6 +32,7 @@ list.addEventListener('click', e=> {
     saveTodos();
 })
 
+// Adding new Todo
 form.addEventListener('submit', e=> {
     e.preventDefault();
     todoName = todoInput.value;
@@ -44,6 +48,8 @@ form.addEventListener('submit', e=> {
     todoInput.value = "";
 })
 
+
+// Showing todos 
 function renderTodo(todos) {
     const templateClone = template.content.cloneNode(true);
     const listItem = templateClone.querySelector('.list-item');
@@ -54,20 +60,19 @@ function renderTodo(todos) {
     checkBox.checked = todos.complete;
     list.appendChild(templateClone);
 
+    console.log('inside renderTodo', todos)
+
 }
 
+// Saving todos
 function saveTodos() {
     localStorage.setItem(TODOS_STORAGE_KEY, JSON.stringify(todos));
 
 }
 
+
+// Loading todos
 function loadTodos() {
     const todoString = localStorage.getItem(TODOS_STORAGE_KEY);
     return JSON.parse(todoString) || [];
 }
-console.log(todoInput)
-// Delete todos
-// complete todos
-
-// Save todos
-// Load todos
